@@ -16,7 +16,7 @@ class BodySet;
 /**
  * Collision detection and response managing.
  * The spatial scanning is performed efficiently with spatial hashing. The response and update are implemented separatedly
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  * @see Teschner, M., Heidelberger, B., Müller, M., Pomerantes, D., & Gross, M. H. (2003, November). Optimized spatial hashing for collision detection of deformable objects. In Vmv (Vol. 3, pp. 47-54).
  */
@@ -38,7 +38,7 @@ private:
     // Current collision testing strategy being used
     CollisionTest *collisionTest;
     // Hashes points and computes aabb
-	void firstPass( int step ); 
+	void firstPass( int step );
 	// Check the faces and handles collisions
 	void secondPass( int step );
     // Unused
@@ -47,7 +47,7 @@ private:
 	void evaluateContacts( CFace& cf, int step );
     void handleCollisions( CFace& cf, CHashItem chi, int step );
     void storeCollision( CFace& cf, CPoint& cp );
-    
+
 public:
     // Inherited constraints methods
     void init( BodySet *bs );

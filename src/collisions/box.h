@@ -1,5 +1,5 @@
 #ifndef BOX_H
-#define BOX_H 
+#define BOX_H
 
 #include <vector>
 #include <iostream>

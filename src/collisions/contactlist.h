@@ -5,14 +5,14 @@
 namespace morph{ namespace softmats{
 /**
  * Manages the list of collisions
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class ContactList{
 private:
     vector<Contact*> contacts;
 public:
-    
+
     ContactList();
 
     Contact* findContact( Body* A, Body* B );

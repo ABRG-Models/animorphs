@@ -17,7 +17,7 @@ public:
     Contact( Body *A, Body *B );
     /**
      * Adds a new collision to the contact
-     * 
+     *
      * @param c - new collision, not null
      */
     void addCollision( Collision* c );
@@ -33,4 +33,3 @@ public:
 };
 
 }}
-

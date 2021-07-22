@@ -16,7 +16,7 @@ namespace morph{ namespace softmats{
 class CollisionTest;
 /**
  * Represents an active collision
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class Collision{
@@ -26,7 +26,7 @@ public:
     bool active; // Whether the collision needs to be processed
     vec cp; // Contact point
     vec cnormal; // Collision normal
-    
+
     Collision( double hc, vec cp, vec cnormal );
     virtual void updateVelocity() = 0;
     virtual void solve(CollisionTest *collisionTest) = 0;
@@ -41,7 +41,7 @@ public:
     Face* f;
     Point* p;
     vector<vec> impulses; // impulses unused
-    
+
     FPCollision( double hc, vec cp, vec cnormal, Face* f, Point* p );
     // Recomputes collision parameters and moves the points towards the contact point
     void solve(CollisionTest *collisionTest);
@@ -51,7 +51,7 @@ public:
 
 /**
  * Represents Edge-Edge collision
- *  
+ *
  * @author Alejandro Jimenez Rodriguez
   */
 class EECollision : public Collision{

@@ -10,9 +10,9 @@ namespace morph{ namespace softmats{
 class Collision;
 
 /**
- * Different kinds of tests for determining collisions between 
+ * Different kinds of tests for determining collisions between
  * primitives.
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class CollisionTest{
@@ -22,9 +22,9 @@ public:
 };
 
 /**
- * Continuous tests find the exact point in the ray x -> x_c 
+ * Continuous tests find the exact point in the ray x -> x_c
  * at which two moving primitives intersect.
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class ContinuousCollisionTest : public CollisionTest{
@@ -38,7 +38,7 @@ public:
 
 /**
  * Ground collision testing to be using when no other animats are in the simulation
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class GroundCollisionTest : public CollisionTest{
