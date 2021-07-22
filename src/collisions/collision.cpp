@@ -237,7 +237,7 @@ void FPCollision::solve(CollisionTest *collisionTest){
             }
         }
 
-        delete c;
+        //delete c; HACKALERT_SPW: Commented to work on Mac but not sure why!
     }
 
 }
