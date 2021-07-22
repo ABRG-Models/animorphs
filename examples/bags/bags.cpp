@@ -1,6 +1,6 @@
-#include <softmats/src/softmatsim.h>
-#include <softmats/src/core/animat.h>
-#include <softmats/src/collisions/collision.h>
+#include <src/softmatsim.h>
+#include <src/core/animat.h>
+#include <src/collisions/collision.h>
 
 using namespace morph::softmats;
 
