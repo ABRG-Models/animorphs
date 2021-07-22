@@ -275,6 +275,73 @@ void SoftmatsView::setCamera(float az, float ev){
     this->camera = { r*sin(az)*cos(ev), r*sin(az)*sin(ev), r*cos(az) };
 }
 
+
+void SoftmatsView::updateCamera(){
+
+    /*
+    float speed = 0.2f;
+
+    if(glfwGetKey(window, 'W')){
+        glm::mat4 orientation(1.0f);
+        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
+        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
+        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(0,0,-1,1);
+        viewPort.pos += off;
+    } else if(glfwGetKey(window, 'S')){
+        glm::mat4 orientation(1.0f);
+        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
+        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
+        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(0,0,-1,1);
+        viewPort.pos -= off;
+    }
+
+    if(glfwGetKey(window, 'A')){
+        glm::mat4 orientation(1.0f);
+        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
+        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
+        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(1,0,0,1);
+        viewPort.pos -= off;
+    } else if(glfwGetKey(window, 'D')){
+        glm::mat4 orientation(1.0f);
+        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
+        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
+        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(1,0,0,1);
+        viewPort.pos += off;
+    }
+
+    if(glfwGetKey(window, 'Z')){
+        viewPort.pos += speed * -glm::vec3(0,1,0);
+    } else if(glfwGetKey(window, 'X')){
+        viewPort.pos += speed * +glm::vec3(0,1,0);
+    }
+
+    float MaxVerticalAngle = glm::radians(85.0f);
+    const float mouseSensitivity = 0.05f;
+    double mouseX, mouseY;
+    glfwGetCursorPos(window, &mouseX, &mouseY);
+
+    viewPort.horzAng += mouseSensitivity * (float)mouseX;
+    viewPort.vertAng += mouseSensitivity * (float)mouseY;
+    viewPort.horzAng = fmodf(viewPort.horzAng, glm::radians(360.0f));
+
+    if(viewPort.horzAng < 0.0f) { viewPort.horzAng += glm::radians(360.0f); }
+    if(viewPort.vertAng > MaxVerticalAngle){ viewPort.vertAng = MaxVerticalAngle; }
+    else if(viewPort.vertAng < -MaxVerticalAngle){ viewPort.vertAng = -MaxVerticalAngle; }
+    glfwSetCursorPos(window, 0, 0);
+
+    glfwGetFramebufferSize( window, &viewPort.width, &viewPort.height );
+    viewPort.aspect = (float)viewPort.width/(float)viewPort.height;
+    viewPort.pMat = glm::perspective( 1.0472f, viewPort.aspect, 0.1f, 1000.0f );
+
+    glm::mat4 orientation(1.0f);
+    orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
+    orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
+    viewPort.vMat = orientation * glm::translate(glm::mat4(1.0f), -viewPort.pos);
+    */
+
+}
+
+
 bool SoftmatsView::shouldClose(){
     return glfwWindowShouldClose( window );
 }

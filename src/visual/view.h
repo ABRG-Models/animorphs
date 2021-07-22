@@ -17,5 +17,7 @@ public:
     virtual void postDisplay() = 0;
 
     virtual void setCamera(float az, float ev) = 0;
+
+     virtual void updateCamera() = 0;
 };
 }}

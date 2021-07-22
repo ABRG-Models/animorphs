@@ -60,6 +60,10 @@ namespace morph{ namespace softmats{
         float aspect;
         morph::TransformMatrix<float> pMat;
         morph::TransformMatrix<float> vMat;
+
+        //glm::vec3 pos;
+        float vertAng;
+        float horzAng;
     };
 
     class SoftmatsView : public View{
@@ -95,6 +99,8 @@ namespace morph{ namespace softmats{
         void postDisplay();
         // Sets the camera position - TO IMPROVE
         void setCamera(float az, float ev);
+        // Updates a first-person camera interface using mouse/key input
+        void updateCamera();
         // Sets up the lights
         void installLights( Body*b, morph::TransformMatrix<float>& vMatrix );
 

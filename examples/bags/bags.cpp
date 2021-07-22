@@ -24,7 +24,7 @@ void setup( SoftmatSim *s ){
 
 void update( SoftmatSim *s ){
    //std::cout << "Updating the simulation\n";
-
+   s->updateCamera();
 }
 
 void draw( SoftmatSim *s  ){

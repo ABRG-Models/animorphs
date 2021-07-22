@@ -109,6 +109,8 @@ public:
     void initialize();
     // Draws all the entities
     void drawAll();
+    // Update the camera based on key/mouse input
+    void updateCamera();
     // Runs the simulation
     void run();
 

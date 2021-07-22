@@ -66,6 +66,10 @@ void SoftmatSim::camera( float az, float ev ){
     view->setCamera( az, ev );
 }
 
+void SoftmatSim::updateCamera(){
+    view->updateCamera();
+}
+
 // Listener
 void SoftmatSim::onFinish( void (*f)(const SoftmatSim *s) ){
     this->finishFn = f;
