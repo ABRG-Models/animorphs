@@ -9,15 +9,15 @@
 namespace morph{ namespace softmats{
 /**
  * Class hierarchy to load or generate meshes
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 
 // General interface
 class MeshProvider{
-private:	
+private:
 
-public:		
+public:
 	/*
 		Generates the triangulation of the polygon given by the polyhedron described by the given points
 	*/
@@ -26,7 +26,7 @@ public:
 };
 
 /**
- * Procedural generation of a sphere mesh 
+ * Procedural generation of a sphere mesh
  * @author Alejandro Jimenez Rodriguez
  */
 class SphereMeshProvider: public MeshProvider{
@@ -36,7 +36,7 @@ public:
 	enum SphereType{TYPICAL}; // More kinds of spheres expected to be supported in the future
 	SphereType type;
 	SphereMeshProvider( SphereType type );
-	TriangleMesh* buildMesh();	
+	TriangleMesh* buildMesh();
 };
 
 /**
@@ -52,7 +52,7 @@ public:
 
 /**
  * Loads the mesh from a given obj file
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class ObjMeshProvider : public MeshProvider{

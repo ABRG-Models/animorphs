@@ -20,7 +20,7 @@ void TimeManager::toc(){
     this->end = std::chrono::steady_clock::now();
     int ellapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-    std::cout << "Elapsed: " 
-              << (ellapsed*1e-6) 
+    std::cout << "Elapsed: "
+              << (ellapsed*1e-6)
               << "s\n";
 }
