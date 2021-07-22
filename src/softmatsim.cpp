@@ -7,10 +7,10 @@
 using namespace morph::softmats;
 
 SoftmatSim::SoftmatSim( std::string configFile,
-                        void (*setup)(SoftmatSim *), 
-                        void (*update)(SoftmatSim *), 
+                        void (*setup)(SoftmatSim *),
+                        void (*update)(SoftmatSim *),
                         void(*draw)(SoftmatSim *) ):fps(20){
-    
+
     Config::configPath = configFile;
     this->setup = setup;
     this->update = update;
@@ -76,7 +76,7 @@ void SoftmatSim::onContact( void (*f)(const SoftmatSim *s, ContactList* contacts
 }
 
 // void SoftmatSim::onAnimatContact( void (*f)(const Animat* a, vector<Receptor*> receptors) ){
-    
+
 // }
 
 // Investigation
@@ -118,7 +118,7 @@ void SoftmatSim::run(){
         std::cerr << "Error calling user defined setup\n";
     }
 
-    initialize(); 
+    initialize();
     int step = 0;
 
     if( videoRecorder != nullptr )
@@ -128,7 +128,7 @@ void SoftmatSim::run(){
         spawnSources(step);
 
         animats->resetForces();
-        
+
         try{(*update)(this);}catch(std::exception& ex ){
             std::cerr << "Error calling user defined update\n";
         }
@@ -141,7 +141,7 @@ void SoftmatSim::run(){
                 std::cerr << "Error calling user defined contact processing\n";
             }
         }
-        
+
         for( Body *b : animats->getBodies() )
             b->getMesh()->updateVertexNormals();
 
@@ -171,8 +171,8 @@ void SoftmatSim::cleanup(){
     delete solver;
     delete view;
 }
-    
-    
+
+
 SoftmatSim::~SoftmatSim(){
     cleanup();
 }

@@ -14,11 +14,11 @@
 namespace morph{ namespace softmats{
 /**
  * Interface for the simulator
- * 
- * This class provides the common interface to the simulation. It is 
+ *
+ * This class provides the common interface to the simulation. It is
  * intended to be included and used by external programs. Interaction with the API
  * is perform by defining some listeners for the main events in the simulation.
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class SoftmatSim{
@@ -46,7 +46,7 @@ private:
 
     /**
      * Generates new sources based on the corresponding period.
-     * 
+     *
      * @param step - Current step of the simulation
      */
     void spawnSources(int step);
@@ -60,7 +60,7 @@ public:
     // Creation members
     /**
      * Creates an animat in the scene
-     * 
+     *
      * @param x - x coordinate
      * @param y - y coordinate
      * @param z - z coordinate
@@ -68,7 +68,7 @@ public:
     Animat *animat(float x, float y, float z, double mass);
     /**
      * Creates a new animat source
-     * 
+     *
      * @param n - Number of animats to generate
      * @param period - Period at which new animats should be spawn
      * @param x - x coordinate
@@ -78,7 +78,7 @@ public:
     AnimatSource* animatSource( int n, int period, float x, float y, float z);
     /**
      * Creates a ground a given height
-     * 
+     *
      * @param height
      */
     Ground *ground( float height );
