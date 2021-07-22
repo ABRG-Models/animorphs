@@ -1,0 +1,4 @@
+{
+    "mesh" : "res/models/sphere.obj",
+    "shaderPath" : "shaders/"
+}

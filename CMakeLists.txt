@@ -126,6 +126,9 @@ add_custom_command( TARGET animorphs POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/shaders"
   "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/shaders")
 
+# Compile the examples
+add_subdirectory(examples)
+
 message("Copying the shaders from")
 message("${CMAKE_CURRENT_SOURCE_DIR}/shaders/")
 message("to")

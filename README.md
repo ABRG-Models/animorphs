@@ -6,6 +6,20 @@ The animorphs code compiles into a library and depends on https://github.com/ABR
 
 ## Dependencies
 
+morphologica (clone this inside the animorphs tree), jsoncpp armadillo, opencv, lapack, opengl, glfw3.
+
 ## Compilation
 
+```
+git clone git@github.com:ABRG-Models/animorphs
+cd animorphs
+git clone git@github.com:ABRG-Models/morphologica
+mkdir build
+cd build
+cmake ..
+make
+```
+
 ## Examples
+
+See examples/ directory
