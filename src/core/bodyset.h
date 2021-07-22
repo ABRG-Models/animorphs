@@ -9,7 +9,7 @@ namespace morph{ namespace softmats{
     class Body;
  /**
  * Stores a group of bodies in the simulation
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
     class BodySet{

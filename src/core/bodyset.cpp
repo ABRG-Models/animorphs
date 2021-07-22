@@ -14,7 +14,7 @@ void BodySet::add( Body * b ){
 std::vector<Body *> BodySet::getBodies(){
     return bodies;
 }
-        
+
 void BodySet::addCollisionConstraint( Constraint *c ){
     if( c != NULL ){
         ((CollisionConstraint *)c)->init( this );
@@ -68,19 +68,19 @@ void BodySet::resetReceptors(){
 void BodySet::reset(){
     for( Constraint* c : constraints ){
         c->reset();
-        ((CollisionConstraint *)c)->init(this);    
+        ((CollisionConstraint *)c)->init(this);
     }
 
 }
-        
+
 std::vector<Constraint *> BodySet::getConstraints(){
     return constraints;
 }
-        
+
 BodySet::BodySet(){
     fext = {0.0, 0.0, 0.0};
 }
-        
+
 BodySet::~BodySet(){
 
     for( Body *b : getBodies() ){

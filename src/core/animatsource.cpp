@@ -21,7 +21,7 @@ Animat* AnimatSource::getAnimat( int step ){
         count++;
         return a;
     }
-    
+
     return nullptr;
 }
 

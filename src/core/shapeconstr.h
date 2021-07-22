@@ -9,11 +9,11 @@ class Point;
 class Body;
 /**
  * Shape matching algortithm
- * 
+ *
  * This class manages the shape matching constraint on the shape of each body. It keeps
  * a copy of the original shape and computes corrections based upon it for given deformations.
  * TO-DO: Add clusters and other optimizations
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  * @see Müller, M., Heidelberger, B., Teschner, M., & Gross, M. (2005). Meshless deformations based on shape matching. ACM transactions on graphics (TOG), 24(3), 471-478.
  */

@@ -45,7 +45,7 @@ void Body::setId( int id ){
 }
 
 void Body::resetForces(){
-    
+
     for( Point* p : getMesh()->getVertices() ){
 
         if( p->w > 0 )
@@ -57,7 +57,7 @@ void Body::resetForces(){
 
 Body::~Body(){
     delete mesh;
-    
+
     for( Constraint *c : constraints )
         delete c;
 }

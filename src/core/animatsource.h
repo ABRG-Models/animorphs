@@ -4,7 +4,7 @@
 namespace morph{ namespace softmats{
 /**
  * Spawns sources at a given rate (1/period)
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
 class AnimatSource{

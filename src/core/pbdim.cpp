@@ -33,7 +33,7 @@ void PBD::velocityUpdate( BodySet *bs ){
     }
 }
 
-void PBD::projectConstraints( BodySet *bs ){ 
+void PBD::projectConstraints( BodySet *bs ){
 
     for( Constraint *c : bs->getConstraints() ){
         c->solve();
@@ -52,21 +52,21 @@ void PBD::loop( BodySet *bs, int step ){
 
     // Computing candidate positions
     for(Body* b : bs->getBodies() ){
-        if( b->type == BodyType::GROUND ) continue;  
+        if( b->type == BodyType::GROUND ) continue;
 
         for( Point* q : b->getMesh()->getVertices() )
             if( !q->lock )
-                q->x_c = q->x + h*q->v; 
-        
+                q->x_c = q->x + h*q->v;
+
         b->getMesh()->computeNormals( true );
     }
-    
+
     // Solving the body constraint (shape matching)
     for( Body *b : bs->getBodies() ){
         for( Constraint *c : b->getConstraints() ){
             c->solve();
         }
-    } 
+    }
     // Generating collision constraints
     generateConstraints( bs, step );
 
@@ -75,13 +75,13 @@ void PBD::loop( BodySet *bs, int step ){
         projectConstraints( bs );
 
     // Update the state to valid positions
-    for(Body* b : bs->getBodies() ){  
+    for(Body* b : bs->getBodies() ){
         if( b->type == BodyType::GROUND ) continue;
-             
+
         for( Point* q : b->getMesh()->getVertices() ){
             if( !(q->lock) ){
-                q->v = (q->x_c - q->x)/h;                
-                q->x = q->x_c; 
+                q->v = (q->x_c - q->x)/h;
+                q->x = q->x_c;
             }
         }
 

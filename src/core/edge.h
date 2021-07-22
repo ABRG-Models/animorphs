@@ -4,7 +4,7 @@
 namespace morph{ namespace softmats{
 /**
  * Edge data structure
- * 
+ *
  * @author Alejandro Jimenez Rodriguez
  */
     typedef struct Edge{
