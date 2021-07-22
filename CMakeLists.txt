@@ -37,17 +37,18 @@ if(APPLE)
 endif()
 
 # Tell the program where the morph fonts are. Assuming you installed morphologica in /usr/local:
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMORPH_FONTS_DIR=\"\\\"/usr/local/share/fonts\\\"\"")
+# [uncomment and correct this if any text-rendering features from morphologica get used]
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMORPH_FONTS_DIR=\"\\\"/usr/local/share/fonts\\\"\"")
 
 # Find the libraries which will be needed
 find_package(jsoncpp REQUIRED)
-find_package(HDF5 REQUIRED)
+##find_package(HDF5 REQUIRED) # animorphs not currently using HDF5
 find_package(Armadillo REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(LAPACK REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
-find_package(Freetype REQUIRED)
+##find_package(Freetype REQUIRED) # animorphs not currently using any text rendering from morphologica
 
 # Define collections of includes for the dependencies
 get_target_property(JSON_INC_PATH jsoncpp_lib INTERFACE_INCLUDE_DIRECTORIES)
