@@ -3,7 +3,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#ifdef __OSX__
+#ifdef __APPLE__
 # include <OpenGL/gl3.h>
 //#else
 //# include <GL3/gl3.h>
