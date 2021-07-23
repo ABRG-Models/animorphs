@@ -82,8 +82,8 @@ void SoftmatsView::init( ){
     renderingProgram = OpenglUtils::createShaderProgram(vshader.c_str(), fshader.c_str());
     OpenglUtils::checkOpenGLError();
     std::cout << "Shaders loaded\n";
-    camera = { 0.0f, -0.5f, 10.5f };
-    viewPort.x = 0.0f; viewPort.y = -2.0f; viewPort.z = 0.0f;
+    //camera = { 0.0f, -0.5f, 10.5f };
+    //viewPort.x = 0.0f; viewPort.y = -2.0f; viewPort.z = 0.0f;
     light.initialLightLoc = { 5.0f, 2.0f, 2.0f };
     // White light
     light.globalAmbient[0] = 0.9f;
@@ -105,6 +105,10 @@ void SoftmatsView::init( ){
     // textureId = Utils::loadTextureImage("../res/fabric.jpg");
     textureId = OpenglUtils::loadTextureChecker( 1000, 1000 );
     setup();
+
+    viewPort.vertAng = 0.0;
+    viewPort.horzAng = 0.0;
+    viewPort.pos = {0.,0.5,-10};
 }
 
 void SoftmatsView::installLights( Body *b, morph::TransformMatrix<float>& vMatrix ){
@@ -146,7 +150,7 @@ void SoftmatsView::installLights( Body *b, morph::TransformMatrix<float>& vMatri
 void SoftmatsView::preDisplay( ){
 
     glClear( GL_DEPTH_BUFFER_BIT );
-    // glClearColor( 0.0, 0.18, 0.3, 1.0 );
+    glClearColor( 0.87, 0.94, 1.0, 1.0 );
     glClear( GL_COLOR_BUFFER_BIT );
     glUseProgram( renderingProgram );
 
@@ -159,8 +163,6 @@ void SoftmatsView::preDisplay( ){
     viewPort.aspect = (float)viewPort.width/(float)viewPort.height;
     viewPort.pMat.setToIdentity();
     viewPort.pMat.perspective( 60.0f, viewPort.aspect, 0.1f, 1000.0f ); // 60 degrees is 1.0472 rads
-    viewPort.vMat.setToIdentity();
-    viewPort.vMat.translate( -camera );
 }
 
 void SoftmatsView::displayGround(){
@@ -278,66 +280,53 @@ void SoftmatsView::setCamera(float az, float ev){
 
 void SoftmatsView::updateCamera(){
 
-    /*
-    float speed = 0.2f;
+        float speed = 0.3f;
+        float mouse_sensirtivity = 0.05;
 
-    if(glfwGetKey(window, 'W')){
-        glm::mat4 orientation(1.0f);
-        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
-        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
-        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(0,0,-1,1);
-        viewPort.pos += off;
-    } else if(glfwGetKey(window, 'S')){
-        glm::mat4 orientation(1.0f);
-        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
-        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
-        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(0,0,-1,1);
-        viewPort.pos -= off;
-    }
+        double mouseX, mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+        viewPort.horzAng = mouse_sensirtivity*(float)mouseX;
+        viewPort.vertAng = mouse_sensirtivity*(float)mouseY;
 
-    if(glfwGetKey(window, 'A')){
-        glm::mat4 orientation(1.0f);
-        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
-        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
-        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(1,0,0,1);
-        viewPort.pos -= off;
-    } else if(glfwGetKey(window, 'D')){
-        glm::mat4 orientation(1.0f);
-        orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
-        orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
-        glm::vec3 off = speed * glm::inverse(orientation) * glm::vec4(1,0,0,1);
-        viewPort.pos += off;
-    }
+        morph::TransformMatrix<float> orientation;
+        morph::Quaternion<float> q;
+        q.rotate (1,0,0, -viewPort.vertAng);
+        q.rotate (0,1,0, -viewPort.horzAng);
+        orientation.rotate(q);
 
-    if(glfwGetKey(window, 'Z')){
-        viewPort.pos += speed * -glm::vec3(0,1,0);
-    } else if(glfwGetKey(window, 'X')){
-        viewPort.pos += speed * +glm::vec3(0,1,0);
-    }
+        if(glfwGetKey(window, 'W')){
+            morph::TransformMatrix<float> direction;
+            direction.rotate(q);
+            morph::Vector<float, 3> off = ((direction.invert()) * morph::Vector<float, 4>({0,0,-1,1})).less_one_dim();
+            viewPort.pos += off * speed;
+        } else if (glfwGetKey(window, 'S')){
+            morph::TransformMatrix<float> direction;
+            direction.rotate(q);
+            morph::Vector<float, 3> off = ((direction.invert()) * morph::Vector<float, 4>({0,0,-1,1})).less_one_dim();
+            viewPort.pos -= off * speed;
+        }
 
-    float MaxVerticalAngle = glm::radians(85.0f);
-    const float mouseSensitivity = 0.05f;
-    double mouseX, mouseY;
-    glfwGetCursorPos(window, &mouseX, &mouseY);
+        if(glfwGetKey(window, 'D')){
+            morph::TransformMatrix<float> direction;
+            direction.rotate(q);
+            morph::Vector<float, 3> off = ((direction.invert()) * morph::Vector<float, 4>({1,0,0,1})).less_one_dim();
+            viewPort.pos += off * speed;
+        } else if (glfwGetKey(window, 'A')){
+            morph::TransformMatrix<float> direction;
+            direction.rotate(q);
+            morph::Vector<float, 3> off = ((direction.invert()) * morph::Vector<float, 4>({1,0,0,1})).less_one_dim();
+            viewPort.pos -= off * speed;
+        }
 
-    viewPort.horzAng += mouseSensitivity * (float)mouseX;
-    viewPort.vertAng += mouseSensitivity * (float)mouseY;
-    viewPort.horzAng = fmodf(viewPort.horzAng, glm::radians(360.0f));
+        if(glfwGetKey(window, 'Z')){
+            viewPort.pos += morph::Vector<float, 3>({0,1,0}) * speed;
+        } else if (glfwGetKey(window, 'X')){
+            viewPort.pos += morph::Vector<float, 3>({0,-1,0}) * speed;
+        }
 
-    if(viewPort.horzAng < 0.0f) { viewPort.horzAng += glm::radians(360.0f); }
-    if(viewPort.vertAng > MaxVerticalAngle){ viewPort.vertAng = MaxVerticalAngle; }
-    else if(viewPort.vertAng < -MaxVerticalAngle){ viewPort.vertAng = -MaxVerticalAngle; }
-    glfwSetCursorPos(window, 0, 0);
-
-    glfwGetFramebufferSize( window, &viewPort.width, &viewPort.height );
-    viewPort.aspect = (float)viewPort.width/(float)viewPort.height;
-    viewPort.pMat = glm::perspective( 1.0472f, viewPort.aspect, 0.1f, 1000.0f );
-
-    glm::mat4 orientation(1.0f);
-    orientation = glm::rotate(orientation, viewPort.vertAng, glm::vec3(1,0,0));
-    orientation = glm::rotate(orientation, viewPort.horzAng, glm::vec3(0,1,0));
-    viewPort.vMat = orientation * glm::translate(glm::mat4(1.0f), -viewPort.pos);
-    */
+        morph::TransformMatrix<float> trans;
+        trans.translate(-viewPort.pos);
+        viewPort.vMat = orientation * trans;
 
 }
 

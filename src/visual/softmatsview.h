@@ -61,7 +61,7 @@ namespace morph{ namespace softmats{
         morph::TransformMatrix<float> pMat;
         morph::TransformMatrix<float> vMat;
 
-        //glm::vec3 pos;
+        morph::Vector<float, 3> pos;
         float vertAng;
         float horzAng;
     };
