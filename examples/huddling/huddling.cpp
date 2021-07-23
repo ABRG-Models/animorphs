@@ -105,6 +105,9 @@ void setup( SoftmatSim *s ){
 }
 
 void update( SoftmatSim *s ){
+
+    s->updateCamera();
+
     float x, z;
 
     for( Pup& p : pups ){

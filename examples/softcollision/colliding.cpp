@@ -21,6 +21,8 @@ void setup( SoftmatSim *s ){
 }
 
 void update( SoftmatSim *s ){
+    s->updateCamera();
+    
     a->move(1.0, 0.0, 0.0);
     b->move(-1.0, 0.0, 0.0);
 }
