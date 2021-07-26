@@ -19,5 +19,8 @@ public:
     virtual void setCamera(float az, float ev) = 0;
 
      virtual void updateCamera() = 0;
+
+     virtual void updateCameraEgo(Body* b) = 0;
+
 };
 }}

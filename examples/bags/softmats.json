@@ -1,4 +1,5 @@
 {
-    "mesh" : "res/models/sphere.obj",
-    "shaderPath" : "shaders/osx/"
+    "mesh" : "res/stu/weird.obj",
+    "shaderPath" : "shaders/osx/",
+    "groundTexture" : "template.jpg"
 }

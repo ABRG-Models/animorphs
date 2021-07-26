@@ -102,14 +102,26 @@ void SoftmatsView::init( ){
     light.lightSpecular[1] = 1.0f;
     light.lightSpecular[2] = 1.0f;
     light.lightSpecular[3] = 1.0f;
+
+
+    std::string groundTextureLocation = Config::getConfig()->getGroundTextureLocation();
+    if(groundTextureLocation=="NULL"){
+        textureId = OpenglUtils::loadTextureChecker( 1000, 1000 );
+    } else {
+        textureId = OpenglUtils::loadTextureImage(groundTextureLocation.c_str());
+    }
     // textureId = Utils::loadTextureImage("../res/fabric.jpg");
-    textureId = OpenglUtils::loadTextureChecker( 1000, 1000 );
+
     setup();
 
     viewPort.vertAng = 0.0;
     viewPort.horzAng = 0.0;
     viewPort.pos = {0.,0.5,-10};
 }
+
+//void SoftmatsView::setGroundTexture(){
+ //   textureId = OpenglUtils::loadTextureImage("template.jpg");
+//}
 
 void SoftmatsView::installLights( Body *b, morph::TransformMatrix<float>& vMatrix ){
     float zero[4] = {0.0f, 0.0f, 0.0f, 0.0f};
@@ -152,6 +164,7 @@ void SoftmatsView::preDisplay( ){
     glClear( GL_DEPTH_BUFFER_BIT );
     glClearColor( 0.87, 0.94, 1.0, 1.0 );
     glClear( GL_COLOR_BUFFER_BIT );
+
     glUseProgram( renderingProgram );
 
     viewPort.mvLoc = glGetUniformLocation( renderingProgram, "mv_matrix" );
@@ -163,6 +176,7 @@ void SoftmatsView::preDisplay( ){
     viewPort.aspect = (float)viewPort.width/(float)viewPort.height;
     viewPort.pMat.setToIdentity();
     viewPort.pMat.perspective( 60.0f, viewPort.aspect, 0.1f, 1000.0f ); // 60 degrees is 1.0472 rads
+
 }
 
 void SoftmatsView::displayGround(){
@@ -198,6 +212,7 @@ void SoftmatsView::displayGround(){
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
     glDrawArrays( GL_TRIANGLES, 0, 6 );
+
 }
 
 void SoftmatsView::displayBody( Body* b ){
@@ -263,9 +278,11 @@ void SoftmatsView::displayBody( Body* b ){
     glBindBuffer( GL_ARRAY_BUFFER, vbo[5] );
     glVertexAttribPointer( 2, 3, GL_FLOAT, GL_FALSE, 0, 0 );
     glEnableVertexAttribArray( 2 );
+
     // Adjust settings
-    // glActiveTexture( GL_TEXTURE0 );
-    // glBindTexture( GL_TEXTURE_2D, textureId );
+    glActiveTexture( GL_TEXTURE0 );
+    glBindTexture( GL_TEXTURE_2D, textureId );
+
 
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
@@ -278,15 +295,16 @@ void SoftmatsView::setCamera(float az, float ev){
 }
 
 
+
 void SoftmatsView::updateCamera(){
 
         float speed = 0.3f;
-        float mouse_sensirtivity = 0.05;
+        float mouse_sensitivity = 0.05;
 
         double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
-        viewPort.horzAng = mouse_sensirtivity*(float)mouseX;
-        viewPort.vertAng = mouse_sensirtivity*(float)mouseY;
+        viewPort.horzAng = mouse_sensitivity*(float)mouseX;
+        viewPort.vertAng = mouse_sensitivity*(float)mouseY;
 
         morph::TransformMatrix<float> orientation;
         morph::Quaternion<float> q;
@@ -326,6 +344,44 @@ void SoftmatsView::updateCamera(){
 
         morph::TransformMatrix<float> trans;
         trans.translate(-viewPort.pos);
+        viewPort.vMat = orientation * trans;
+
+}
+
+
+void SoftmatsView::updateCameraEgo(Body* b){
+
+    /*
+    bool c = true;
+    arma::vec cm = arma::zeros<arma::vec>(3);
+    double msum = 0;
+    for( Point* pt : b->getMesh()->getVertices() ){
+        if( c )
+            cm += pt->x_c/pt->w;
+        else
+            cm += pt->x/pt->w;
+        msum += 1.0/pt->w;
+    }
+    */
+    arma::vec cm = b->getMesh()->getVertices()[0]->x;
+
+
+        float speed = 0.3f;
+        float mouse_sensitivity = 0.05;
+
+        double mouseX, mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+        viewPort.horzAng = mouse_sensitivity*(float)mouseX;
+        viewPort.vertAng = mouse_sensitivity*(float)mouseY;
+
+        morph::TransformMatrix<float> orientation;
+        morph::Quaternion<float> q;
+        q.rotate (1,0,0, -viewPort.vertAng);
+        q.rotate (0,1,0, -viewPort.horzAng);
+        orientation.rotate(q);
+
+        morph::TransformMatrix<float> trans;
+        trans.translate(cm[0],cm[1],cm[2]);
         viewPort.vMat = orientation * trans;
 
 }

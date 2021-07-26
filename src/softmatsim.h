@@ -22,11 +22,13 @@ namespace morph{ namespace softmats{
  * @author Alejandro Jimenez Rodriguez
  */
 class SoftmatSim{
+public:
+// Set of animats in the scene
+    BodySet *animats;
 private:
     // Sources of animats
     std::vector<AnimatSource*> sources;
-    // Set of animats in the scene
-    BodySet *animats;
+
     // Ground
     Ground *theGround;
     // Position-based-dynamics solver
@@ -111,6 +113,8 @@ public:
     void drawAll();
     // Update the camera based on key/mouse input
     void updateCamera();
+    // Update the camera based on key/mouse input
+    void updateCameraEgo( Body* b);
     // Runs the simulation
     void run();
 
