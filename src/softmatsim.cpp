@@ -70,6 +70,11 @@ void SoftmatSim::updateCamera(){
     view->updateCamera();
 }
 
+void SoftmatSim::updateCameraEgo(Body* a){
+    view->updateCameraEgo(a);
+}
+
+
 // Listener
 void SoftmatSim::onFinish( void (*f)(const SoftmatSim *s) ){
     this->finishFn = f;
