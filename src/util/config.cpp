@@ -26,6 +26,7 @@ Config::Config(){
 
     this->meshLocation = conf.getString("mesh", ".");
     this->shaderLocation = conf.getString("shaderPath", ".");
+    this->groundTextureLocation = conf.getString("groundTexture", "NULL");
     std::cout << "config location: " << configPath << "\n";
     std::cout << "Mesh location: " << meshLocation << "\n";
     std::cout << "Shader location: " << shaderLocation << "\n";
@@ -41,6 +42,10 @@ std::string Config::getMeshLocation(){
 
 std::string Config::getShaderLocation(){
     return this->shaderLocation;
+}
+
+std::string Config::getGroundTextureLocation(){
+    return this->groundTextureLocation;
 }
 
 double Config::getTimeStep(){

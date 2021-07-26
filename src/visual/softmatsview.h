@@ -101,8 +101,11 @@ namespace morph{ namespace softmats{
         void setCamera(float az, float ev);
         // Updates a first-person camera interface using mouse/key input
         void updateCamera();
+        // Updates a animat-centered camer
+        void updateCameraEgo(Body* b);
         // Sets up the lights
         void installLights( Body*b, morph::TransformMatrix<float>& vMatrix );
+        //void setGroundTexture();
 
         SoftmatsView();
         ~SoftmatsView();

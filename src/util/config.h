@@ -18,6 +18,7 @@ protected:
     std::string meshLocation;
     // Location of the shader
     std::string shaderLocation;
+    std::string groundTextureLocation;
     Config();
     ~Config();
     static Config *instance_;
@@ -28,6 +29,7 @@ public:
     int getNumIterations();
     std::string getMeshLocation();
     std::string getShaderLocation();
+    std::string getGroundTextureLocation();
 
 };
 
