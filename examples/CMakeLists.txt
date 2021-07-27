@@ -9,3 +9,6 @@ add_subdirectory(bags)
 
 # Huddling
 add_subdirectory(huddling)
+
+# Standalone
+add_subdirectory(standalone)
