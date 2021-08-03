@@ -84,9 +84,9 @@ else()
     )
 endif()
 
-#if(USE_GLEW)
+if(USE_GLEW)
   list (APPEND ALL_LIBS ${GLEW_LIBRARIES})
-#endif(USE_GLEW)
+endif(USE_GLEW)
 
 file(GLOB SOURCES
   src/*.cpp

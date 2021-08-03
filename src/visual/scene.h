@@ -1,8 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <GL/glew.h>
+#ifdef USE_GLEW
+    #include <GL/glew.h>
+#endif
 #include <GLFW/glfw3.h>
+
+#ifdef __OSX__
+# include <OpenGL/gl3.h>
+#else
+# include <GL3/gl3.h>
+#endif
+
 #include "morph/TransformMatrix.h"
 #include "../util/meshutil.h"
 #include "../core/face.h"
@@ -211,21 +220,23 @@ public:
 
         glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
         glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 1 ); // OpenGL 4.1 is max supported on Mac
-        #ifdef __OSX__
+#ifdef __OSX__
         glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        #endif
+#endif
         window = glfwCreateWindow( 600, 600, "model", NULL, NULL );
 
         glfwMakeContextCurrent( window );
         if (window) { std::cout << "Window created\n"; }
         else { std::cout << "Window creation failed \n"; exit(EXIT_FAILURE);}
 
+#ifdef USE_GLEW
         if( glewInit() == GLEW_OK ){ std::cout << "Glew initialized\n"; }
         else { std::cout << "Glew initialized failed \n"; exit(EXIT_FAILURE); }
+        glewExperimental = true;
+#endif
 
         glfwSwapInterval( 1 );
-        glewExperimental = true;
 
         GLuint VertexArrayID;
         glGenVertexArrays(1, &VertexArrayID);
