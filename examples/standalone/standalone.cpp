@@ -20,8 +20,8 @@ int main( int n, char** args ){
 
     int fps = 20;
     morph::Config conf(args[1]);
+    std::string sceneFiles = conf.getString("pathToSceneFiles", "");
     Scene S(conf.getString("vertexShaderPath", "NULL"), conf.getString("fragmentShaderPath", "NULL"));
-
 
     PBD *solver = new PBD();
     BodySet *animats = new BodySet();
@@ -29,7 +29,9 @@ int main( int n, char** args ){
         // load textures
     const Json::Value tx = conf.getArray ("textures");
     for (int i=0; i<tx.size(); i++) {
-        S.addTexture(tx[i].asString());
+        std::stringstream st;
+        st<<sceneFiles<<tx[i].asString();
+        S.addTexture(st.str());
     }
 
     {   // add the ground
@@ -42,7 +44,9 @@ int main( int n, char** args ){
         // add animats
     const Json::Value mx = conf.getArray ("meshes");
     for (int i=0; i<mx.size(); i++) {
-        Animat* A = new Animat(mx[i].asString(), 0., i*5, 0.);
+        std::stringstream st;
+        st<<sceneFiles<<mx[i].asString();
+        Animat* A = new Animat(st.str(), 0., i*5, 0.);
         A->setMass( 100.0 );
         A->setConstraints();
         A->type = BodyType::ANIMAT;

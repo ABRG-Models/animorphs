@@ -1,12 +1,13 @@
 {
     "vertexShaderPath"   	: "shaders/osx/animorphs.vsh",
     "fragmentShaderPath" 	: "shaders/osx/animorphs.fsh",
-    "textures"			: ["textures/sawdust.bmp",
-				    "textures/fur1.bmp",
-				    "textures/fur2.bmp",
-				    "textures/fur3.bmp"],
-    "meshes"			: ["res/stu/pooh.obj",
-				   "res/stu/weird.obj",
-			           "res/stu/sphere.obj"]
+    "pathToSceneFiles" 		: "examples/standalone/scene/",
+    "textures"			: ["sawdust.bmp",
+				    "fur1.bmp",
+				    "fur2.bmp",
+				    "fur3.bmp"],
+    "meshes"			: ["sausage.obj",
+				   "weird.obj",
+			           "sphere.obj"]
 
 }
