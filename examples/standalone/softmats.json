@@ -1,5 +1,0 @@
-{
-    "mesh" : "res/sphere.obj",
-    "shaderPath" : "shaders/osx/",
-    "groundTexture" : "template.jpg"
-}

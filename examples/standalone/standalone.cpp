@@ -1,8 +1,12 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <src/visual/scene.h>
 #include <src/softmatsim.h>
 #include <src/core/animat.h>
 #include <src/collisions/collision.h>
 #include <src/collisions/collisionconstr.h>
-#include <src/util/config.h>
+#include <morph/Config.h>
 
 using namespace morph::softmats;
 
@@ -14,41 +18,45 @@ int main( int n, char** args ){
         return 1;
     }
 
-    Config::configPath = args[1];
-
     int fps = 20;
+    morph::Config conf(args[1]);
+    Scene S(conf.getString("vertexShaderPath", "NULL"), conf.getString("fragmentShaderPath", "NULL"));
 
-    SoftmatsView *view = new SoftmatsView();
+
     PBD *solver = new PBD();
     BodySet *animats = new BodySet();
 
+        // load textures
+    const Json::Value tx = conf.getArray ("textures");
+    for (int i=0; i<tx.size(); i++) {
+        S.addTexture(tx[i].asString());
+    }
 
-    // MODEL SPECIFIC SETUP
-    {
-        // add the ground
+    {   // add the ground
         Ground *g = new Ground( -2.0 );
         g->type = BodyType::GROUND;
         animats->add(g);
         animats->reset();
-        view->setupGround(g);
     }
 
-    {
-        // add an animat
-        Animat* a = new Animat(0., 2., 0.);
-        a->setMass( 100.0 );
-        a->setConstraints();
-        a->type = BodyType::ANIMAT;
-        animats->add(a);
+        // add animats
+    const Json::Value mx = conf.getArray ("meshes");
+    for (int i=0; i<mx.size(); i++) {
+        Animat* A = new Animat(mx[i].asString(), 0., i*5, 0.);
+        A->setMass( 100.0 );
+        A->setConstraints();
+        A->type = BodyType::ANIMAT;
+        animats->add(A);
     }
 
-    {
-        // add an animat
-        Animat* b = new Animat(0., 10., 0.);
-        b->setMass( 100.0 );
-        b->setConstraints();
-        b->type = BodyType::ANIMAT;
-        animats->add(b);
+        // associate textures with animats
+    int k=0;
+    for( Body *b : animats->getBodies() ){
+        S.addSceneObject(sceneObject(b->getMesh()));
+        if( b->type == BodyType::ANIMAT ){
+            S.pairObjectTexture(S.mySceneObjects.size()-1,1+(k%(tx.size()-1)));
+            k++;
+        }
     }
 
     // GENERAL SETUP
@@ -63,15 +71,12 @@ int main( int n, char** args ){
 
     // MAIN PROGRAM LOOP
     int step = 0;
-    bool running = true;
 
-    while( running && !view->shouldClose() ){
-
+    do {
+        S.update();
 
         // INTEGRATE THE MODEL
-
         animats->resetForces();
-
         animats->resetReceptors();
         solver->loop( animats, step );
 
@@ -81,13 +86,8 @@ int main( int n, char** args ){
             std::cout << "Contact area : " << contacts->getContactArea( false ) << "\n";
         }
 
-
-
         // UPDATE THE DISPLAY
-
-        if( step++ % fps == 0 ){
-            continue;
-        }
+        if(step++ % fps == 0){ continue; }
 
         for( Body *b : animats->getBodies() ){
             if( b->type == BodyType::ANIMAT ){
@@ -95,19 +95,14 @@ int main( int n, char** args ){
             }
         }
 
-        view->preDisplay();
-
-        view->displayGround();
+        int k=0;
         for( Body *b : animats->getBodies() ){
-            if( b->type == BodyType::ANIMAT ){
-                view->displayBody( b );
-            }
+            S.mySceneObjects[k].updatePositions(b->getMesh());
+            k++;
         }
 
-        view->updateCamera();
+        } while( S.running );
 
-        view->postDisplay();
-
-    }
     return 0;
 }
+

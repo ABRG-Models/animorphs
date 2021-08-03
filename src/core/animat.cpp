@@ -19,6 +19,19 @@ Animat::Animat( float x, float y, float z ){
     material.matShi = OpenglUtils::goldShininess();
 }
 
+
+Animat::Animat(std::string pathToMeshFile, float x, float y, float z ){
+    init(pathToMeshFile,16);
+    type = BodyType::ANIMAT;
+    mesh->translate(x, y, z);
+    mesh->scale(1.0f);
+    material.matAmb = OpenglUtils::goldAmbient();
+    material.matDif = OpenglUtils::goldDiffuse();
+    material.matSpe = OpenglUtils::goldSpecular();
+    material.matShi = OpenglUtils::goldShininess();
+}
+
+
 void Animat::setConstraints(){
     ShapeMatchingContraint *smc = new ShapeMatchingContraint( 0.2 );
     this->addShapeConstraint( smc );
@@ -36,6 +49,13 @@ void Animat::init( int prec ){
     ObjMeshProvider mp( Config::getConfig()->getMeshLocation().c_str() );
     mesh = mp.buildMesh();
 }
+
+void Animat::init(std::string pathToMeshFile,  int prec ){
+    // SphereMeshProvider mp( SphereMeshProvider::TYPICAL );
+    ObjMeshProvider mp( pathToMeshFile.c_str() );
+    mesh = mp.buildMesh();
+}
+
 
 void Animat::addGroundImpulse( arma::vec f ){
     for( Point* p : getMesh()->getVertices() ){

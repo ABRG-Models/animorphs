@@ -47,6 +47,7 @@ find_package(Armadillo REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(LAPACK REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
 ##find_package(Freetype REQUIRED) # animorphs not currently using any text rendering from morphologica
 
@@ -83,9 +84,9 @@ else()
     )
 endif()
 
-if(USE_GLEW)
+#if(USE_GLEW)
   list (APPEND ALL_LIBS ${GLEW_LIBRARIES})
-endif(USE_GLEW)
+#endif(USE_GLEW)
 
 file(GLOB SOURCES
   src/*.cpp

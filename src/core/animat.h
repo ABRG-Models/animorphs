@@ -15,8 +15,10 @@ namespace morph{ namespace softmats{
 class Animat : public Body{
 private:
     void init(int);
+    void init(std::string, int);
 public:
     Animat( float x, float y, float z );
+    Animat( std::string, float x, float y, float z );
 
     void setMass( double m );
     void setConstraints();
