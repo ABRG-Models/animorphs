@@ -18,7 +18,7 @@ int main( int n, char** args ){
         return 1;
     }
 
-    int fps = 20;
+    int fps = 30;
     morph::Config conf(args[1]);
     std::string sceneFiles = conf.getString("pathToSceneFiles", "");
     Scene S(conf.getString("vertexShaderPath", "NULL"), conf.getString("fragmentShaderPath", "NULL"));
@@ -56,12 +56,17 @@ int main( int n, char** args ){
         // associate textures with animats
     int k=0;
     for( Body *b : animats->getBodies() ){
-        S.addSceneObject(sceneObject(b->getMesh()));
+        S.addSceneObject(sceneObject(S.programID,b->getMesh()));
         if( b->type == BodyType::ANIMAT ){
             S.pairObjectTexture(S.mySceneObjects.size()-1,1+(k%(tx.size()-1)));
             k++;
         }
     }
+
+    std::stringstream st;
+    st<<sceneFiles<<"cone.obj";
+
+    S.addScenePrimitive(st.str());
 
     // GENERAL SETUP
     animats->reset();
@@ -77,7 +82,7 @@ int main( int n, char** args ){
     int step = 0;
 
     do {
-        S.update();
+
 
         // INTEGRATE THE MODEL
         animats->resetForces();
@@ -90,20 +95,24 @@ int main( int n, char** args ){
             std::cout << "Contact area : " << contacts->getContactArea( false ) << "\n";
         }
 
-        // UPDATE THE DISPLAY
-        if(step++ % fps == 0){ continue; }
-
         for( Body *b : animats->getBodies() ){
             if( b->type == BodyType::ANIMAT ){
                 b->getMesh()->updateVertexNormals();
             }
         }
 
+
+        // UPDATE THE DISPLAY
+        if(step++ % fps == 0){ continue; }
+
         int k=0;
         for( Body *b : animats->getBodies() ){
             S.mySceneObjects[k].updatePositions(b->getMesh());
             k++;
         }
+
+        S.update();
+
 
         } while( S.running );
 
