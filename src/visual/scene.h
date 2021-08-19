@@ -192,6 +192,8 @@ public:
 
     void updatePositions(float scale, std::vector<float> pos, std::vector<float> rot){
 
+        // This method aligns the points to the axis defined by rot
+
         std::vector<morph::softmats::Face *>& faces = initialMesh->getFaces();
 
         // see: https://www.mathworks.com/matlabcentral/answers/500030-rotate-a-3d-data-cloud-to-align-with-one-axis
@@ -226,15 +228,24 @@ public:
         cy *= normc;
         cz *= normc;
 
-
         /*
+        // Equivalent to...
         arma::mat R (3,3,arma::fill::eye);
         arma::mat M1 = {{0,-cz,cy},{cz,0,-cx},{-cy,cx,0}};
         arma::mat M2 = {{cx*cx,cx*cy,cx*cz},{cx*cy,cy*cy,cy*cz},{cx*cz,cy*cz,cz*cz}};
         arma::mat rotMat = R*cos(ang)+sin(ang)*M1+(1-cos(ang))*M2;
+        arma::mat p0 = {f->points[0]->x(0),f->points[0]->x(1),f->points[0]->x(2)};
+        p0 = p0*rotMat; // note the order of this operation
+
+        // Equivalent to...
+        float ca = cos(ang);
+        float sa = sin(ang);
+        float mca = 1-ca;
         arma::mat rotMat2 = {{ca+mca*cx*cx, -cz*sa+mca*cx*cy, cy*sa+mca*cx*cz},
                             {cz*sa+mca*cx*cy, ca+mca*cy*cy, -cx*sa+mca*cy*cz},
                             {-cy*sa+mca*cx*cz, cx*sa+mca*cy*cz, ca+mca*cz*cz}};
+        arma::mat p0 = {f->points[0]->x(0),f->points[0]->x(1),f->points[0]->x(2)};
+        p0 = p0*rotMat; // note the order of this operation 
         */
 
         float ca = cos(ang);
@@ -259,29 +270,30 @@ public:
         for( morph::softmats::Face* f : faces ){
 
             // First triangle vertex
-            rotx = rot00*f->points[0]->x(0) + rot01*f->points[0]->x(1) + rot02*f->points[0]->x(2);
-            roty = rot10*f->points[0]->x(0) + rot11*f->points[0]->x(1) + rot12*f->points[0]->x(2);
-            rotz = rot20*f->points[0]->x(0) + rot21*f->points[0]->x(1) + rot22*f->points[0]->x(2);
+            rotx = rot00*f->points[0]->x(0) + rot10*f->points[0]->x(1) + rot20*f->points[0]->x(2);
+            roty = rot01*f->points[0]->x(0) + rot11*f->points[0]->x(1) + rot21*f->points[0]->x(2);
+            rotz = rot02*f->points[0]->x(0) + rot22*f->points[0]->x(1) + rot22*f->points[0]->x(2);
             g_vertex_buffer_data[k+0] = rotx*scale+pos[0];
             g_vertex_buffer_data[k+1] = roty*scale+pos[1];
             g_vertex_buffer_data[k+2] = rotz*scale+pos[2];
             // Second triangle vertex
-            rotx = rot00*f->points[1]->x(0) + rot01*f->points[1]->x(1) + rot02*f->points[1]->x(2);
-            roty = rot10*f->points[1]->x(0) + rot11*f->points[1]->x(1) + rot12*f->points[1]->x(2);
-            rotz = rot20*f->points[1]->x(0) + rot21*f->points[1]->x(1) + rot22*f->points[1]->x(2);
+            rotx = rot00*f->points[1]->x(0) + rot10*f->points[1]->x(1) + rot20*f->points[1]->x(2);
+            roty = rot01*f->points[1]->x(0) + rot11*f->points[1]->x(1) + rot21*f->points[1]->x(2);
+            rotz = rot02*f->points[1]->x(0) + rot12*f->points[1]->x(1) + rot22*f->points[1]->x(2);
             g_vertex_buffer_data[k+3] = rotx*scale+pos[0];
             g_vertex_buffer_data[k+4] = roty*scale+pos[1];
             g_vertex_buffer_data[k+5] = rotz*scale+pos[2];
             // Third triangle vertex
-            rotx = rot00*f->points[2]->x(0) + rot01*f->points[2]->x(1) + rot02*f->points[2]->x(2);
-            roty = rot10*f->points[2]->x(0) + rot11*f->points[2]->x(1) + rot12*f->points[2]->x(2);
-            rotz = rot20*f->points[2]->x(0) + rot21*f->points[2]->x(1) + rot22*f->points[2]->x(2);
+            rotx = rot00*f->points[2]->x(0) + rot10*f->points[2]->x(1) + rot20*f->points[2]->x(2);
+            roty = rot01*f->points[2]->x(0) + rot11*f->points[2]->x(1) + rot21*f->points[2]->x(2);
+            rotz = rot02*f->points[2]->x(0) + rot12*f->points[2]->x(1) + rot22*f->points[2]->x(2);
             g_vertex_buffer_data[k+6] = rotx*scale+pos[0];
             g_vertex_buffer_data[k+7] = roty*scale+pos[1];
             g_vertex_buffer_data[k+8] = rotz*scale+pos[2];
 
             k+=9;
         }
+
 
     }
 
@@ -529,22 +541,76 @@ public:
             std::vector<float> pos(3,0);
             std::vector<float> rot(3,0);
             int q=0;
-
             for( morph::softmats::Point* p : V ){
-
                 pos[0] = p->x[0];
                 pos[1] = p->x[1];
                 pos[2] = p->x[2];
-
                 rot[0] = V[q]->v(0);
                 rot[1] = V[q]->v(1);
                 rot[2] = V[q]->v(2);
-
                 scenePrimitives[0].updatePositions(0.05, pos, rot);
                 scenePrimitives[0].render(0,1,0);
-
                 q++;
             }
+
+
+            std::vector<morph::softmats::Face *>& faces = mySceneObjects[i].initialMesh->getFaces();
+
+            std::vector<float> pos2(3,0);
+            std::vector<float> rot2(3,0);
+            int q2=0;
+
+            for( morph::softmats::Face* f : faces ){
+
+
+                float p1x = f->points[0]->x(0);
+                float p1y = f->points[0]->x(1);
+                float p1z = f->points[0]->x(2);
+
+                float p2x = f->points[1]->x(0);
+                float p2y = f->points[1]->x(1);
+                float p2z = f->points[1]->x(2);
+
+                float p3x = f->points[2]->x(0);
+                float p3y = f->points[2]->x(1);
+                float p3z = f->points[2]->x(2);
+
+
+                // cross product of reference and velocity axes
+                float vx = p2x-p1x;
+                float vy = p2y-p1y;
+                float vz = p2z-p1z;
+                float rx = p3x-p1x;
+                float ry = p3y-p1y;
+                float rz = p3z-p1z;
+
+                float cx = vy*rz-vz*ry;
+                float cy = vz*rx-vx*rz;
+                float cz = vx*ry-vy*rx;
+
+                float normc = 1./sqrt(cx*cx+cy*cy+cz*cz);
+
+                cx*=normc;
+                cy*=normc;
+                cz*=normc;
+
+                //for(int i=0; i<3; i++) { pvalues.push_back(f->points[1]->x(i)); }
+                //for(int i=0; i<3; i++) { pvalues.push_back(f->points[2]->x(i)); }
+
+                pos2[0] = (p1x+p2x+p3x)/3;//p->x[0];
+                pos2[1] = (p1y+p2y+p3y)/3;//p->x[1];
+                pos2[2] = (p1z+p2z+p3z)/3;//p->x[2];
+                rot2[0] = cx;//V[q]->v(0);
+                rot2[1] = cy;//V[q]->v(1);
+                rot2[2] = cz;//V[q]->v(2);
+
+                scenePrimitives[0].updatePositions(0.05, pos2, rot2);
+                scenePrimitives[0].render(0,0,1);
+
+                q2++;
+            }
+
+
         }
 
 
