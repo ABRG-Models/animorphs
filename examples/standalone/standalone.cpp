@@ -111,7 +111,7 @@ int main( int n, char** args ){
             k++;
         }
 
-        S.update();
+        S.update(2);
 
 
         } while( S.running );

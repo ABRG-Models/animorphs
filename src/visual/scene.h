@@ -245,7 +245,7 @@ public:
                             {cz*sa+mca*cx*cy, ca+mca*cy*cy, -cx*sa+mca*cy*cz},
                             {-cy*sa+mca*cx*cz, cx*sa+mca*cy*cz, ca+mca*cz*cz}};
         arma::mat p0 = {f->points[0]->x(0),f->points[0]->x(1),f->points[0]->x(2)};
-        p0 = p0*rotMat; // note the order of this operation 
+        p0 = p0*rotMat; // note the order of this operation
         */
 
         float ca = cos(ang);
@@ -516,103 +516,95 @@ public:
         running = !glfwGetKey(window, GLFW_KEY_ESCAPE );
     }
 
-    /*
     void update(void){
         preDraw();
         draw();
         postDraw();
     }
-    */
 
-
-    void update(void){
+    void update(int opt){
         preDraw();
 
         draw();
 
-        glUniform1i( glGetUniformLocation(programID, "type" ) , 1 );
+        if(opt>0){
+            glUniform1i( glGetUniformLocation(programID, "type" ) , 1 );
 
-        for(int i=0;i<mySceneObjects.size();i++){
+            for(int i=0;i<mySceneObjects.size();i++){
 
-            // get vertices of the scene object
-            std::vector<morph::softmats::Point *>& V = mySceneObjects[i].initialMesh->getVertices();
+                // get vertices of the scene object
+                std::vector<morph::softmats::Point *>& V = mySceneObjects[i].initialMesh->getVertices();
 
-            // update origin of primitive to mark each vertex
-            std::vector<float> pos(3,0);
-            std::vector<float> rot(3,0);
-            int q=0;
-            for( morph::softmats::Point* p : V ){
-                pos[0] = p->x[0];
-                pos[1] = p->x[1];
-                pos[2] = p->x[2];
-                rot[0] = V[q]->v(0);
-                rot[1] = V[q]->v(1);
-                rot[2] = V[q]->v(2);
-                scenePrimitives[0].updatePositions(0.05, pos, rot);
-                scenePrimitives[0].render(0,1,0);
-                q++;
+                // update origin of primitive to mark each vertex
+                std::vector<float> pos(3,0);
+                std::vector<float> rot(3,0);
+                int q=0;
+                for( morph::softmats::Point* p : V ){
+                    pos[0] = p->x[0];
+                    pos[1] = p->x[1];
+                    pos[2] = p->x[2];
+                    rot[0] = V[q]->v(0);
+                    rot[1] = V[q]->v(1);
+                    rot[2] = V[q]->v(2);
+                    scenePrimitives[0].updatePositions(0.05, pos, rot);
+                    scenePrimitives[0].render(0,1,0);
+                    q++;
+                }
+
+
+                if(opt>1){
+                    std::vector<morph::softmats::Face *>& faces = mySceneObjects[i].initialMesh->getFaces();
+
+                    std::vector<float> pos2(3,0);
+                    std::vector<float> rot2(3,0);
+
+                    for( morph::softmats::Face* f : faces ){
+
+                        float p1x = f->points[0]->x(0);
+                        float p1y = f->points[0]->x(1);
+                        float p1z = f->points[0]->x(2);
+
+                        float p2x = f->points[1]->x(0);
+                        float p2y = f->points[1]->x(1);
+                        float p2z = f->points[1]->x(2);
+
+                        float p3x = f->points[2]->x(0);
+                        float p3y = f->points[2]->x(1);
+                        float p3z = f->points[2]->x(2);
+
+
+                        // cross product of reference and velocity axes
+                        float vx = p2x-p1x;
+                        float vy = p2y-p1y;
+                        float vz = p2z-p1z;
+                        float rx = p3x-p1x;
+                        float ry = p3y-p1y;
+                        float rz = p3z-p1z;
+
+                        float cx = vy*rz-vz*ry;
+                        float cy = vz*rx-vx*rz;
+                        float cz = vx*ry-vy*rx;
+
+                        float normc = 1./sqrt(cx*cx+cy*cy+cz*cz);
+
+                        cx*=normc;
+                        cy*=normc;
+                        cz*=normc;
+
+                        pos2[0] = (p1x+p2x+p3x)/3;
+                        pos2[1] = (p1y+p2y+p3y)/3;
+                        pos2[2] = (p1z+p2z+p3z)/3;
+                        rot2[0] = cx;
+                        rot2[1] = cy;
+                        rot2[2] = cz;
+
+                        scenePrimitives[0].updatePositions(0.05, pos2, rot2);
+                        scenePrimitives[0].render(0,0,1);
+
+                    }
+                }
             }
-
-
-            std::vector<morph::softmats::Face *>& faces = mySceneObjects[i].initialMesh->getFaces();
-
-            std::vector<float> pos2(3,0);
-            std::vector<float> rot2(3,0);
-            int q2=0;
-
-            for( morph::softmats::Face* f : faces ){
-
-
-                float p1x = f->points[0]->x(0);
-                float p1y = f->points[0]->x(1);
-                float p1z = f->points[0]->x(2);
-
-                float p2x = f->points[1]->x(0);
-                float p2y = f->points[1]->x(1);
-                float p2z = f->points[1]->x(2);
-
-                float p3x = f->points[2]->x(0);
-                float p3y = f->points[2]->x(1);
-                float p3z = f->points[2]->x(2);
-
-
-                // cross product of reference and velocity axes
-                float vx = p2x-p1x;
-                float vy = p2y-p1y;
-                float vz = p2z-p1z;
-                float rx = p3x-p1x;
-                float ry = p3y-p1y;
-                float rz = p3z-p1z;
-
-                float cx = vy*rz-vz*ry;
-                float cy = vz*rx-vx*rz;
-                float cz = vx*ry-vy*rx;
-
-                float normc = 1./sqrt(cx*cx+cy*cy+cz*cz);
-
-                cx*=normc;
-                cy*=normc;
-                cz*=normc;
-
-                //for(int i=0; i<3; i++) { pvalues.push_back(f->points[1]->x(i)); }
-                //for(int i=0; i<3; i++) { pvalues.push_back(f->points[2]->x(i)); }
-
-                pos2[0] = (p1x+p2x+p3x)/3;//p->x[0];
-                pos2[1] = (p1y+p2y+p3y)/3;//p->x[1];
-                pos2[2] = (p1z+p2z+p3z)/3;//p->x[2];
-                rot2[0] = cx;//V[q]->v(0);
-                rot2[1] = cy;//V[q]->v(1);
-                rot2[2] = cz;//V[q]->v(2);
-
-                scenePrimitives[0].updatePositions(0.05, pos2, rot2);
-                scenePrimitives[0].render(0,0,1);
-
-                q2++;
-            }
-
-
         }
-
 
         //draw();
         postDraw();
